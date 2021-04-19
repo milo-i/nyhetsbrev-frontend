@@ -2,12 +2,12 @@ let root = document.getElementById('root');
 
 // Template for HTML
 let rootTemplate = `<nav class="wrapper">
-												<ul class="ul-list">
-												<li class="li-item"><a href="index.html">Hem</a></li>
-												<li class="li-item"><a href="#">Kontakta</a></li>
-												<li class="li-item"><a href="#">Om oss</a></li>
-											</ul>
- 										</nav>
+	<ul class="ul-list">
+		<li class="li-item"><a href="index.html">Hem</a></li>
+		<li class="li-item"><a href="#">Kontakta</a></li>
+		<li class="li-item"><a href="#">Om oss</a></li>
+		</ul>
+ 	</nav>
 
  <div class="user-input">
 
@@ -58,7 +58,6 @@ signUpBtn.addEventListener('click', (e) => {
 		}
 	});
 
-
 	let newUser = {
 		userEmail: userEmail.value,
 		userPassword: userPassword.value,
@@ -67,14 +66,22 @@ signUpBtn.addEventListener('click', (e) => {
 
 	console.log(newUser);
 
-	// Fetch adressen för POSTEN måste läggas till
-	fetch('/', {
+	fetch("http://localhost:3000/users/new", {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/ json'
+			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(newUser)
 	})
+		.then(res => res.json())
+		.then(data => console.log(data));
 
 
-});
+})
+
+loginBtn.addEventListener('click', (e) => {
+
+
+
+
+})
