@@ -66,6 +66,9 @@ signUpBtn.addEventListener('click', (e) => {
 
 	console.log(newUser);
 
+
+	// Se till att alla fält måste vara ifyllda för att en user ska kunna reggas. 2. Verifiera så att det inte finns user med samma email
+
 	fetch("http://localhost:3000/users/new", {
 		method: 'POST',
 		headers: {
@@ -80,8 +83,24 @@ signUpBtn.addEventListener('click', (e) => {
 })
 
 loginBtn.addEventListener('click', (e) => {
+	e.preventDefault();
 
+	let checkUser = {
+		userEmail: userEmail.value,
+		userInputPassword: userPassword.value
+	}
 
+	console.log(checkUser);
+
+	fetch("http://localhost:3000/users/login", {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(checkUser)
+	})
+		.then(res => res.json())
+		.then(data => console.log(data));
 
 
 })
