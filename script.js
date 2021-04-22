@@ -20,7 +20,6 @@ let rootTemplate = `<nav class="wrapper">
     <button class="signUpBtn" id="signUpBtn">Registrera dig</button>
     <button class="loginBtn" id="loginBtn">Logga in</button>
 
-
     <div id="wrapper">
      <label for="yes_no_radio">Vill du ta del av vårt nyhetsbrev?</label>
      <p>
@@ -30,10 +29,45 @@ let rootTemplate = `<nav class="wrapper">
       <input type="radio" name="yes_no" value="false" id="no">Nope!!!!</input>
      </p>
     </div>
-
  </div>`;
 
 root.insertAdjacentHTML('afterbegin', rootTemplate);
+
+function logIn(username, subscription, id) {
+	root.innerHTML = '';
+	let loginTemplate = `<nav class="wrapper">
+	<ul class="ul-list">
+		<li class="li-item"><a href="index.html">Hem</a></li>
+		<li class="li-item"><a href="#">Kontakta</a></li>
+		<li class="li-item"><a href="#">Om oss</a></li>
+		</ul>
+ 	</nav>
+
+ <div class="user-data">
+
+<h1>Hej ${username} och välkommen till Login sidan</h1>
+
+<p>Din prenumerationsstatus är: ${subscription}</<p>
+
+ </div>
+	
+	    <div id="wrapper">
+     <label for="yes_no_radio">Vill du ändra din prenumerationsstatus? Klicka i någon av knapparna och sedan klickar du på Spara knappen</label>
+     <p>
+      <input type="radio" name="yes_no" value="true" id="yes">Japp!!!</input>
+     </p>
+     <p>
+      <input type="radio" name="yes_no" value="false" id="no">Nope!!!!</input>
+     </p>
+			<button>Spara</button>
+
+    </div>`;
+
+	root.insertAdjacentHTML("afterbegin", loginTemplate);
+
+
+}
+
 
 
 // Variables and eventlisteners to retrieve input values
@@ -45,6 +79,7 @@ let loginBtn = document.getElementById('loginBtn');
 let subscription = document.getElementsByName('yes_no');
 
 
+// SIGNUP
 signUpBtn.addEventListener('click', (e) => {
 	e.preventDefault();
 
@@ -67,7 +102,7 @@ signUpBtn.addEventListener('click', (e) => {
 	console.log(newUser);
 
 
-	// Se till att alla fält måste vara ifyllda för att en user ska kunna reggas. 2. Verifiera så att det inte finns user med samma email
+	// Se till att alla fält måste vara ifyllda för att en user ska kunna reggas.
 
 	fetch("http://localhost:3000/users/new", {
 		method: 'POST',
@@ -77,11 +112,13 @@ signUpBtn.addEventListener('click', (e) => {
 		body: JSON.stringify(newUser)
 	})
 		.then(res => res.json())
-		.then(data => console.log(data));
+		.then(data => console.log(data)); // Kolla denna console.log och den ska tas bort
 
 
 })
 
+
+// LOGIN
 loginBtn.addEventListener('click', (e) => {
 	e.preventDefault();
 
@@ -89,8 +126,6 @@ loginBtn.addEventListener('click', (e) => {
 		userEmail: userEmail.value,
 		userInputPassword: userPassword.value
 	}
-
-	console.log(checkUser);
 
 	fetch("http://localhost:3000/users/login", {
 		method: 'POST',
@@ -100,7 +135,46 @@ loginBtn.addEventListener('click', (e) => {
 		body: JSON.stringify(checkUser)
 	})
 		.then(res => res.json())
-		.then(data => console.log(data));
+		.then((data) => {
+
+			console.log(data);
 
 
+			if (data.message) {
+				if (data.message == 'Fel användarnamn eller lösenord ifyllt') {
+					alert('Fel användarnamn eller lösenord ifyllt')
+					return root.insertAdjacentHTML('afterbegin', rootTemplate);
+				}
+			} else {
+
+				logIn(data.userName, data.subscription, data.userId)
+				saveLogin(data.userName, data.subscription, data.userId);
+			}
+		});
 })
+
+
+
+function saveLogin(username, subscription, id) {
+	let user = JSON.stringify({
+		id: id,
+		username: username,
+		subscription: subscription
+	});
+	localStorage.setItem('user', user);
+}
+
+
+function getLogin() {
+	// Kolla om det finns localStorage
+	let user = localStorage.getItem('user');
+	let checkUser = JSON.parse(user);
+	if (checkUser != null) {
+		console.log('inloggad');
+		console.log(checkUser);
+		console.log(typeof checkUser);
+		// anropa funktion för att skriva ut templates för en inloggad användare
+		logIn(checkUser.username, checkUser.subscription, checkUser.id)
+	}
+}
+getLogin();
