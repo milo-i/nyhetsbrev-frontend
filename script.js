@@ -59,13 +59,49 @@ function logIn(username, subscription, id) {
      <p>
       <input type="radio" name="yes_no" value="false" id="no">Nope!!!!</input>
      </p>
-			<button>Spara</button>
+			<button id="saveBtn">Spara</button>
 
     </div>`;
 
 	root.insertAdjacentHTML("afterbegin", loginTemplate);
 
+	let saveBtn = document.getElementById('saveBtn');
 
+	saveBtn.addEventListener('click', (e) => {
+		e.preventDefault();
+		console.log('hej');
+
+		let newSubscriptionChoice = document.getElementsByName('yes_no');
+		newSubscriptionChoice.forEach(radio => {
+			if (radio.checked) {
+				// console.log(radio.value); FYI BOOLEAN VÄRDENA SOM VISAS I SUBSCRIPTION ÄR TYPEOF STRING OCH INTE BOOLEAN 
+				// console.log(typeof radio.value);
+				return newSubscriptionChoice = radio.value;
+			}
+		});
+		console.log(newSubscriptionChoice);
+
+
+		let updateUser = {
+			userId: JSON.parse(localStorage.getItem('user')).id,
+			newSubscriptionChoice: newSubscriptionChoice
+		}
+
+		console.log(updateUser);
+
+		fetch("http://localhost:3000/users/sub", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(updateUser)
+		})
+			.then(res => res.json())
+			.then(data => console.log(data));
+
+
+
+	})
 }
 
 
