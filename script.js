@@ -47,7 +47,7 @@ function logIn(username, subscription, id) {
 
 <h1>Hej ${username} och välkommen till Login sidan</h1>
 
-<p>Din prenumerationsstatus är: ${subscription}</<p>
+<p>Din prenumerationsstatus är: <span id="status">${subscription}</span></<p>
 
  </div>
 	
@@ -87,7 +87,9 @@ function logIn(username, subscription, id) {
 			newSubscriptionChoice: newSubscriptionChoice
 		}
 
-		console.log(updateUser);
+
+		console.log(updateUser.userId);
+		console.log(typeof updateUser.userId);
 
 		fetch("http://localhost:3000/users/sub", {
 			method: 'POST',
@@ -97,13 +99,33 @@ function logIn(username, subscription, id) {
 			body: JSON.stringify(updateUser)
 		})
 			.then(res => res.json())
-			.then(data => console.log(data));
+			.then((data) => {
 
 
+				console.log(data)
+				console.log(data.newSubscriptionChoice)
 
+
+				// let status = document.getElementById('status');
+				// statusValue = status.innerText;
+				// checkStatus(statusValue, data[newSubscriptionChoice]);
+				// console.log(status.innerText);
+				// console.log(statusValue);
+				// statusValue
+
+			});
 	})
 }
 
+
+// function checkStatus(statusValue, newStatus) {
+// 	if (statusValue != newStatus) {
+// 		statusValue = '';
+// 		statusValue = newStatus;
+// 		return statusValue;
+// 	}
+
+// }
 
 
 // Variables and eventlisteners to retrieve input values
@@ -135,7 +157,7 @@ signUpBtn.addEventListener('click', (e) => {
 		subscription: subscriptionChoice
 	}
 
-	console.log(newUser);
+	//console.log(newUser);
 
 
 	// Se till att alla fält måste vara ifyllda för att en user ska kunna reggas.
@@ -148,9 +170,17 @@ signUpBtn.addEventListener('click', (e) => {
 		body: JSON.stringify(newUser)
 	})
 		.then(res => res.json())
-		.then(data => console.log(data)); // Kolla denna console.log och den ska tas bort
+		.then((data) => {
 
-
+			if (data.message == 'Användare existerar redan') {
+				alert('Användare existerar. Välj en annan email!');
+				userEmail.value = '';
+				userPassword.value = '';
+				subscription.checked = '';
+			} else {
+				logIn(data.userName, data.subscription)
+			}
+		});
 })
 
 
