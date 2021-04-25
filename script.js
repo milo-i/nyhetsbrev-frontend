@@ -103,7 +103,8 @@ function logIn(username, subscription, id) {
 			.then(res => res.json())
 			.then((data) => {
 
-
+				logIn(data.userName, data.newSubscriptionChoice);
+				updateLS(data.newSubscriptionChoice);
 				console.log(data)
 				console.log(data.newSubscriptionChoice)
 			});
@@ -116,16 +117,6 @@ function logIn(username, subscription, id) {
 	// 	localStorage.clear();
 	// })
 }
-
-
-// function checkStatus(statusValue, newStatus) {
-// 	if (statusValue != newStatus) {
-// 		statusValue = '';
-// 		statusValue = newStatus;
-// 		return statusValue;
-// 	}
-
-// }
 
 
 // Variables and eventlisteners to retrieve input values
@@ -204,7 +195,6 @@ loginBtn.addEventListener('click', (e) => {
 
 			console.log(data);
 
-
 			if (data.message) {
 				if (data.message == 'Fel användarnamn eller lösenord ifyllt') {
 					alert('Fel användarnamn eller lösenord ifyllt')
@@ -219,7 +209,11 @@ loginBtn.addEventListener('click', (e) => {
 		});
 })
 
-
+function updateLS(newSubscriptionChoice) {
+	let userLocalStorage = JSON.parse(localStorage.getItem('user'));
+	userLocalStorage.subscription = newSubscriptionChoice;
+	localStorage.setItem('user', JSON.stringify(userLocalStorage));
+}
 
 function saveLogin(username, subscription, id) {
 	let user = JSON.stringify({
@@ -229,7 +223,6 @@ function saveLogin(username, subscription, id) {
 	});
 	localStorage.setItem('user', user);
 }
-
 
 function getLogin() {
 	// Kolla om det finns localStorage
