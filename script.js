@@ -71,27 +71,18 @@ function logIn(username, subscription, id) {
 
 	saveBtn.addEventListener('click', (e) => {
 		e.preventDefault();
-		console.log('hej');
 
 		let newSubscriptionChoice = document.getElementsByName('yes_no');
 		newSubscriptionChoice.forEach(radio => {
 			if (radio.checked) {
-				// console.log(radio.value); FYI BOOLEAN VÄRDENA SOM VISAS I SUBSCRIPTION ÄR TYPEOF STRING OCH INTE BOOLEAN 
-				// console.log(typeof radio.value);
 				return newSubscriptionChoice = radio.value;
 			}
 		});
-		console.log(newSubscriptionChoice);
-
 
 		let updateUser = {
 			userId: JSON.parse(localStorage.getItem('user')).id,
 			newSubscriptionChoice: newSubscriptionChoice
 		}
-
-
-		console.log(updateUser.userId);
-		console.log(typeof updateUser.userId);
 
 		fetch("http://localhost:3000/users/sub", {
 			method: 'POST',
@@ -105,13 +96,10 @@ function logIn(username, subscription, id) {
 
 				logIn(data.userName, data.newSubscriptionChoice);
 				updateLS(data.newSubscriptionChoice);
-				console.log(data)
-				console.log(data.newSubscriptionChoice)
 			});
 	})
 
 	logOutBtn.addEventListener('click', (e) => {
-		console.log('klickat logoutbtn');
 		e.preventDefault();
 		root.innerHTML = '';
 		root.insertAdjacentHTML("afterbegin", rootTemplate);
@@ -120,7 +108,6 @@ function logIn(username, subscription, id) {
 }
 
 // Variables and eventlisteners to retrieve input values
-
 let userEmail = document.getElementById('email')
 let userPassword = document.getElementById('password')
 let signUpBtn = document.getElementById('signUpBtn');
@@ -130,13 +117,10 @@ let subscription = document.getElementsByName('yes_no');
 // SIGNUP
 signUpBtn.addEventListener('click', (e) => {
 	e.preventDefault();
-
 	let subscriptionChoice;
 
 	subscription.forEach(radio => {
 		if (radio.checked) {
-			// console.log(radio.value); FYI BOOLEAN VÄRDENA SOM VISAS I SUBSCRIPTION ÄR TYPEOF STRING OCH INTE BOOLEAN 
-			// console.log(typeof radio.value);
 			return subscriptionChoice = radio.value;
 		}
 	});
@@ -146,8 +130,6 @@ signUpBtn.addEventListener('click', (e) => {
 		userPassword: userPassword.value,
 		subscription: subscriptionChoice
 	}
-
-	// Se till att alla fält måste vara ifyllda för att en user ska kunna reggas.
 
 	fetch("http://localhost:3000/users/new", {
 		method: 'POST',
@@ -193,8 +175,6 @@ loginBtn.addEventListener('click', (e) => {
 		.then(res => res.json())
 		.then((data) => {
 
-			console.log(data);
-
 			if (data.message) {
 				if (data.message == 'Fel användarnamn eller lösenord ifyllt') {
 					alert('Fel användarnamn eller lösenord ifyllt')
@@ -229,10 +209,6 @@ function getLogin() {
 	let user = localStorage.getItem('user');
 	let checkUser = JSON.parse(user);
 	if (checkUser != null) {
-		console.log('inloggad');
-		console.log(checkUser);
-		console.log(typeof checkUser);
-		// anropa funktion för att skriva ut templates för en inloggad användare
 		logIn(checkUser.username, checkUser.subscription, checkUser.id)
 	}
 }
