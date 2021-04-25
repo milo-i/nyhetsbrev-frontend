@@ -1,3 +1,18 @@
 body {
  font-family: 'Roboto', sans-serif;
+ background-color: #f1faee;
+}
+
+.user-input {
+ background-color: #a8dadc;
+ width: 50%;
+ margin: 0 auto;
+ border-radius: 10px;
+ padding: 40px;
+}
+
+#wrapper {
+ margin: 50px;
+ width: 50%;
+
 }
