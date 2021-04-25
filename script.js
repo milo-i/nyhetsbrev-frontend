@@ -23,7 +23,7 @@ let rootTemplate = `<nav class="wrapper">
     <div id="wrapper">
      <label for="yes_no_radio">Vill du ta del av vårt nyhetsbrev?</label>
      <p>
-      <input type="radio" name="yes_no" value="true" id="yes">Japp!!!</input>
+      <input type="radio" name="yes_no" value="true" id="yes" required>Japp!!!</input>
      </p>
      <p>
       <input type="radio" name="yes_no" value="false" id="no">Nope!!!!</input>
@@ -60,12 +60,14 @@ function logIn(username, subscription, id) {
       <input type="radio" name="yes_no" value="false" id="no">Nope!!!!</input>
      </p>
 			<button id="saveBtn">Spara</button>
+			<button id="logOutBtn">Logga ut</button>
 
     </div>`;
 
 	root.insertAdjacentHTML("afterbegin", loginTemplate);
 
 	let saveBtn = document.getElementById('saveBtn');
+	let logOutBtn = document.getElementById('logOutBtn');
 
 	saveBtn.addEventListener('click', (e) => {
 		e.preventDefault();
@@ -104,17 +106,15 @@ function logIn(username, subscription, id) {
 
 				console.log(data)
 				console.log(data.newSubscriptionChoice)
-
-
-				// let status = document.getElementById('status');
-				// statusValue = status.innerText;
-				// checkStatus(statusValue, data[newSubscriptionChoice]);
-				// console.log(status.innerText);
-				// console.log(statusValue);
-				// statusValue
-
 			});
 	})
+
+	// logOutBtn.addEventListener('click', (e) => {
+	// 	e.preventDefault();
+	// 	root.innerHTML = '';
+	// 	root.insertAdjacentHTML("afterbegin", rootTemplate);
+	// 	localStorage.clear();
+	// })
 }
 
 
@@ -136,7 +136,6 @@ let signUpBtn = document.getElementById('signUpBtn');
 let loginBtn = document.getElementById('loginBtn');
 let subscription = document.getElementsByName('yes_no');
 
-
 // SIGNUP
 signUpBtn.addEventListener('click', (e) => {
 	e.preventDefault();
@@ -157,9 +156,6 @@ signUpBtn.addEventListener('click', (e) => {
 		subscription: subscriptionChoice
 	}
 
-	//console.log(newUser);
-
-
 	// Se till att alla fält måste vara ifyllda för att en user ska kunna reggas.
 
 	fetch("http://localhost:3000/users/new", {
@@ -176,13 +172,16 @@ signUpBtn.addEventListener('click', (e) => {
 				alert('Användare existerar. Välj en annan email!');
 				userEmail.value = '';
 				userPassword.value = '';
-				subscription.checked = '';
-			} else {
-				logIn(data.userName, data.subscription)
+				document.getElementsByName('yes_no').checked = false; // Om jag hinner, kolla hur man uncheckar en radio button
+			} else if (data.message == 'Vänligen fyll i alla fält för att registrera din email') {
+				alert('Vänligen fyll i alla fält för att registrera din email');
+			}
+			else {
+				logIn(data.userName, data.subscription);
+				saveLogin(data.userName, data.subscription, data.userId);
 			}
 		});
 })
-
 
 // LOGIN
 loginBtn.addEventListener('click', (e) => {
@@ -209,7 +208,8 @@ loginBtn.addEventListener('click', (e) => {
 			if (data.message) {
 				if (data.message == 'Fel användarnamn eller lösenord ifyllt') {
 					alert('Fel användarnamn eller lösenord ifyllt')
-					return root.insertAdjacentHTML('afterbegin', rootTemplate);
+					userEmail.value = '';
+					userPassword.value = '';
 				}
 			} else {
 
