@@ -110,14 +110,14 @@ function logIn(username, subscription, id) {
 			});
 	})
 
-	// logOutBtn.addEventListener('click', (e) => {
-	// 	e.preventDefault();
-	// 	root.innerHTML = '';
-	// 	root.insertAdjacentHTML("afterbegin", rootTemplate);
-	// 	localStorage.clear();
-	// })
+	logOutBtn.addEventListener('click', (e) => {
+		console.log('klickat logoutbtn');
+		e.preventDefault();
+		root.innerHTML = '';
+		root.insertAdjacentHTML("afterbegin", rootTemplate);
+		localStorage.clear();
+	});
 }
-
 
 // Variables and eventlisteners to retrieve input values
 
@@ -163,7 +163,7 @@ signUpBtn.addEventListener('click', (e) => {
 				alert('Användare existerar. Välj en annan email!');
 				userEmail.value = '';
 				userPassword.value = '';
-				document.getElementsByName('yes_no').checked = false; // Om jag hinner, kolla hur man uncheckar en radio button
+				//document.getElementsByName('yes_no').checked = false; // Om jag hinner, kolla hur man uncheckar en radio button
 			} else if (data.message == 'Vänligen fyll i alla fält för att registrera din email') {
 				alert('Vänligen fyll i alla fält för att registrera din email');
 			}
