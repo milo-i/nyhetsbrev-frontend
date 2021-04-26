@@ -84,7 +84,7 @@ function logIn(username, subscription, id) {
 			newSubscriptionChoice: newSubscriptionChoice
 		}
 
-		fetch("http://localhost:3000/users/sub", {
+		fetch("https://newsletter-medieinstitutet.herokuapp.com/users/sub", {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -131,7 +131,7 @@ signUpBtn.addEventListener('click', (e) => {
 		subscription: subscriptionChoice
 	}
 
-	fetch("http://localhost:3000/users/new", {
+	fetch("https://newsletter-medieinstitutet.herokuapp.com/users/new", {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -165,7 +165,7 @@ loginBtn.addEventListener('click', (e) => {
 		userInputPassword: userPassword.value
 	}
 
-	fetch("http://localhost:3000/users/login", {
+	fetch("https://newsletter-medieinstitutet.herokuapp.com/users/login", {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
